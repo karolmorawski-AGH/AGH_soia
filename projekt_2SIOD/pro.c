@@ -1,25 +1,33 @@
 /*kompilacja: gcc -o watki watki.c -lthread -lpthread */
-#define _REENTRANT    /* basic 3-lines for threads */
+#define _REENTRANT    
 #include <pthread.h>
 #include <math.h>
 #include <stdio.h>
-#include <stdlib.h>	
+#include <stdlib.h>
+#include <unistd.h>	
 #define NUM_THREADS 3
 
 	
-	
+	//licznik do petli
 	int i;
+	//wczytany argument x
 	float x;
-	pthread_t tid[NUM_THREADS];      /* array of thread IDs */
+	//tablica id watkow
+	pthread_t tid[NUM_THREADS];   
+	//funkcja usypiajaca watki   
+	void sleeping(pthread_t);
 	
+	//funkcje ktore sa przydzielone watkom
 	void *cos_x(void *); 
 	void *log_x(void *); 
 	void *pow_x(void *); 
 	
+	//wyniki poszczegolnych operacji
 	float x_cos;
 	float x_log;
 	float x_pow;
 
+	//tablica wynikow i suma
 	float wyniki[NUM_THREADS];
 	float suma;
 
@@ -67,10 +75,12 @@
 	{
 	x_cos = *(float*)arg;
 	x_cos = cos(x_cos);
-	printf("%f\n", x_cos);
-	
+
+	sleeping(pthread_self());
+
+	printf("cos(x):      %f\n", x_cos);
 	wyniki[0] = x_cos;
-	
+
 	return (NULL);
 	}
 
@@ -79,7 +89,9 @@
 	{
 	x_log = *(float*)arg;
 	x_log = log10(x_log);
-	printf("%f\n", x_log);
+
+	sleeping(pthread_self());
+	printf("log(x):      %f\n", x_log);
 
 	wyniki[1] = x_log;
 	
@@ -91,9 +103,21 @@
 	{
 	x_pow = *(float*)arg;
 	x_pow = pow(x_pow, 3.0);
-	printf("%f\n", x_pow);
-	
+
+	sleeping(pthread_self());
+
+	printf("x^3:         %f\n", x_pow);
 	wyniki[2] = x_pow;
 
 	return (NULL);
 	}
+
+	//sleeping - watek spi liczbe sekund taka jak identyfikator watku
+	void sleeping(pthread_t t_time)
+	{
+	printf("Watek id: %d spi...\n", t_time);
+	sleep(t_time);
+	printf("Watek id: %d wybudzony\n", t_time);
+	 
+	}
+
