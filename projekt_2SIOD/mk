@@ -1,2 +1,2 @@
 #!/bin/bash
-gcc -o pro pro.c -lpthread -lm 
+gcc -o prog prog.c -lpthread -lm 
