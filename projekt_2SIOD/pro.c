@@ -1,4 +1,4 @@
-/*kompilacja: gcc -o watki watki.c -lthread -lpthread */
+/*kompilacja: gcc -o prog prog.c -lm -lpthread */
 #define _REENTRANT    
 #include <pthread.h>
 #include <math.h>
@@ -115,7 +115,7 @@
 	//sleeping - watek spi liczbe sekund taka jak identyfikator watku
 	void sleeping(pthread_t t_time)
 	{
-	printf("Watek id: %d spi...\n", t_time);
+	printf("Watek id: %d spi %ds...\n", t_time, t_time);
 	sleep(t_time);
 	printf("Watek id: %d wybudzony\n", t_time);
 	 
